@@ -1,5 +1,8 @@
 /_build
 /cover
 /deps
+/doc
+/node_modules
+/package.json
 erl_crash.dump
 *.ez
