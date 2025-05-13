@@ -1,15 +1,16 @@
 defmodule NpmInstallRun do
-  def install(options \\ [pwd: System.get_env("PWD")]) do
-    pwd = options[:pwd]
+  def install(options \\ []) do
+    pwd = Keyword.get(options, :pwd, pwd())
+
     if check?(pwd) do
       System.cmd("npm", ["install"], cd: pwd)
       |> elem(0)
-      |> IO.puts
+      |> IO.puts()
     end
   end
 
   def check?(pwd) do
-    check_package?(pwd) && check_npm?
+    check_npm?() && check_package?(pwd)
   end
 
   def check_package?(pwd) do
@@ -26,7 +27,13 @@ defmodule NpmInstallRun do
       nil ->
         IO.puts("No npm installed")
         false
-      _ -> true
+
+      _ ->
+        true
     end
+  end
+
+  defp pwd do
+    Application.get_env(:npm_install, :pwd, System.get_env("PWD"))
   end
 end
